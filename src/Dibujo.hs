@@ -5,8 +5,7 @@ module Dibujo (
     r180, r270,
     (.-.), (///), (^^^),
     cuarteto, encimar4, ciclar,
-    foldDib, mapDib,
-    figuras
+    foldDib, mapDib, change
 ) where
 
 
@@ -22,8 +21,8 @@ module Dibujo (
 -}
 
 {- definimos la estructura de datos Dibujos con sus correspondientes operadores (Traduciendo lo de arriba) -}
-data Dibujo a = Vacia 
-              | Figura a
+data Dibujo a 
+              = Figura a
               | Rotar (Dibujo a)
               | Espejar (Dibujo a)
               | Rot45 (Dibujo a)
@@ -39,9 +38,9 @@ infixr 7 .-.
 
 infixr 8 ///
 
-comp :: (a -> a) -> Int -> a -> a 
-comp f 0 x = x 
-comp f n x = f . (comp f n-1 x)
+-- lo que hace comp es aplicar n veces la función f a la figura x
+comp :: (a -> a) -> Int -> a -> a
+comp f n x = if n <= 0 then x else f (comp f (n-1) x)
 
 -- Funciones constructoras
 figura :: a -> Dibujo a
@@ -78,17 +77,17 @@ espejar = Espejar
 
 -- rotaciones
 r90 :: Dibujo a -> Dibujo a
-r90 = rotar a 
+r90 dibujo = rotar dibujo 
 
 r180 :: Dibujo a -> Dibujo a  
-r180 a = comp rotar 2 a 
+r180 dibujo = comp r90 2 dibujo
 
 r270 :: Dibujo a -> Dibujo a
-r270 = comp rotar 3 a
+r270 dibujo = comp rotar 3 dibujo
 
 -- Dadas cuatro figuras las ubica en los cuatro cuadrantes.
 cuarteto :: Dibujo a -> Dibujo a -> Dibujo a -> Dibujo a -> Dibujo a
-cuarteto p q r s = (^^^) ((///) (p q) (///) (r s)) 
+cuarteto p q r s = (.-.) ((///) p q) ((///) r s) 
 
 -- Una figura repetida con las cuatro rotaciones, superpuestas.
 encimar4 :: Dibujo a -> Dibujo a 
@@ -96,11 +95,10 @@ encimar4 a = (^^^) a ((^^^) ((^^^) (rotar a) (r180 a)) (r270 a))
 
 -- un cuarteto donde se repite la imagen, rotada (¡No confundir con encimar4!)
 ciclar :: Dibujo a -> Dibujo a
-ciclar p = cuarteto (p, rotar(p), r180(p), r270(p))
+ciclar p = cuarteto p (rotar p) (r180 p) (r270 p)
 
 -- map para nuestro lenguaje
 mapDib :: (a -> b) -> Dibujo a -> Dibujo b
-mapDib f Vacia = Vacia
 mapDib f (Figura a) = Figura (f a)
 mapDib f (Rotar a) = Rotar (mapDib f a)
 mapDib f (Espejar a) = Espejar (mapDib f a)
@@ -115,7 +113,6 @@ mapDib f (Encimar a b) = Encimar (mapDib f a) (mapDib f b)
 
 -- Cambiar todas las básicas de acuerdo a la función.
 change :: (a -> Dibujo b) -> Dibujo a -> Dibujo b
-change f Vacia = Vacia
 change f (Figura a) = f a {- Ni idea de si esta bien -}
 change f (Rotar a) = Rotar (change f a)
 change f (Espejar a) = Espejar (change f a)
@@ -135,8 +132,7 @@ foldDib ::
   (b -> b -> b) ->
   Dibujo a ->
   b
-foldDib f _ _ _ _ _ _ Vacia = f
-foldDib f g h i j k l (Figura a) = f a
+foldDib f _ _ _ _ _ _ (Figura a) = f a
 foldDib f g h i j k l (Rotar a) = g (foldDib f g h i j k l a)
 foldDib f g h i j k l (Espejar a) = h (foldDib f g h i j k l a)
 foldDib f g h i j k l (Rot45 a) = i (foldDib f g h i j k l a)
