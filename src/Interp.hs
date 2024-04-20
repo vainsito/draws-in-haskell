@@ -21,30 +21,6 @@ initial (Conf n dib intBas) size = display win white $ withGrid fig size
     withGrid p x = translate desp desp $ pictures [p, color grey $ grid (ceiling $ size / 10) (0, 0) x 10]
     grey = makeColorI 100 100 100 100
 
-{- --- Figuras
-rectangle :: FloatingPic
-rectangle x y w = lines [x, x V.+ y, x V.+ y V.+ w, x V.+ w, x]
-
-triangle :: FloatingPic
-triangle x y w = lines $ map (x V.+) [(0,0), y V.+ half w, w, (0,0)]
-
-crux :: FloatingPic
-crux x y w = pictures [line [x, x V.+ y V.+ w], line [x V.+ y, x V.+ w]]
-
-efe :: FloatingPic
-efe x y w = line . map (x V.+) $ [
-        zero,uX, p13, p33, p33 V.+ uY , p13 V.+ uY,
-        uX V.+ 4 V.* uY ,uX V.+ 5 V.* uY, x4 V.+ y5,
-        x4 V.+ 6 V.* uY, 6 V.* uY, zero
-    ]
-    where
-        p33 = 3 V.* (uX V.+ uY)
-        p13 = uX V.+ 3 V.* uY
-        x4 = 4 V.* uX
-        y5 = 5 V.* uY
-        uX = (1/6) V.* y
-        uY = (1/6) V.* w
-
 --- V.+ y V.- serian la suma y resta de vectores
 --- V.* multiplicacion
 --- V.negate es negar el vector -}
