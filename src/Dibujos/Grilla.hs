@@ -3,30 +3,13 @@
 
 module Dibujos.Grilla where
 
-import Interp (interp)
+import GrillaFun (grilla)
 import Dibujo (Dibujo, figura, juntar, apilar)
-import FloatingPic(Conf(..), Output, half, zero)
-import qualified Graphics.Gloss.Data.Point.Arithmetic as V
-import Graphics.Gloss ( Picture (Blank), text, translate, scale)
+import FloatingPic(Conf(..), Output,)
+import Graphics.Gloss (text, translate, scale)
 
 -- Defino Tipos
 type Basica = (Int, Int)
-
-row :: [Dibujo a] -> Dibujo a
-row [] = error "row: no puede ser vacío"
-row [d] = d
-row (d:ds) = juntar 1 (fromIntegral $ length ds) d (row ds)
-
-column :: [Dibujo a] -> Dibujo a
-column [] = error "column: no puede ser vacío"
-column [d] = d
-column (d:ds) = apilar 1 (fromIntegral $ length ds) d (column ds)
-
-grilla :: [[Dibujo a]] -> Dibujo a
-grilla = column . map row
-
-
--- Construimos una grilla de tamanio arbitrario
 
 -- En esta funcion voy a armar la figura (x, y) de la grilla, donde x e y son las posiciones de la grilla
 -- 
