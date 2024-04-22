@@ -59,10 +59,16 @@ rot45 :: Dibujo a -> Dibujo a
 rot45 = Rot45
 
 rotar :: Dibujo a -> Dibujo a
-rotar = Rotar
+rotar a = case a of
+  Rotar (Rotar (Rotar b)) -> b
+  _ -> Rotar a 
+-- Elimina usos obsoletos de rotar
 
 espejar :: Dibujo a -> Dibujo a
-espejar = Espejar
+espejar a = case a of
+  Espejar b -> b
+  _ -> Espejar a
+-- Elimina usos obsoletos de espejar
 
 (.-.) :: Dibujo a -> Dibujo a -> Dibujo a 
 (.-.) a b = Apilar 1 1 a b 
