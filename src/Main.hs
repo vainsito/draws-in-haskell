@@ -38,11 +38,14 @@ main :: IO ()
 main = do
   args <- getArgs
   when (length args > 2 || null args) $ do
-    putStrLn "Sólo puede elegir un dibujo. Para ver los dibujos use -l ."
+    putStrLn "Sólo puede elegir un dibujo. Para ver los dibujos use --lista ."
     exitFailure
-  when (head args == "-l") $ do
+  when (head args == "--lista") $ do
     putStrLn "Los dibujos disponibles son:"
     mapM_ (putStrLn . name) configs
+    putStrLn "Por favor, ingrese el nombre del dibujo que desea ver:"
+    dibujoElegido <- getLine
+    initial' configs $ dibujoElegido
     exitSuccess
   when (head args == "-a" && not (null $ tail args)) $ do
     initialH' configsH (args!!1) 
@@ -51,3 +54,6 @@ main = do
     initialSVG' configsSVG (args!!1) 
     exitSuccess
   initial' configs $ head args
+
+-- Para ejecutar con la lista de dibujos hacer:
+-- cabal run dibujos -- --lista
