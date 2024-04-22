@@ -1,13 +1,12 @@
 module Dibujos.Escher where
 
-import Graphics.Gloss (Picture(Blank), blue, red, yellow, color, line, polygon, pictures)
+import Graphics.Gloss (Picture(Blank), blue, color, line, pictures)
 
 import Dibujo (Dibujo, figura, rotar, encimar4, espejar, (^^^), cuarteto, r270, r180, rot45)
-import FloatingPic(Conf(..), Output, half, zero)
+import FloatingPic(Conf(..), Output, zero)
 import GrillaFun(grilla)
 
 import qualified Graphics.Gloss.Data.Point.Arithmetic as V
-
 
 -- Supongamos que eligen.
 type Escher = Bool
@@ -79,6 +78,6 @@ interpBasEscher True x y w = color blue $ pictures [ line $ triangulo x y w]
 escherConf :: Conf
 escherConf = Conf {
     name = "Escher",
-    pic = escher 3 True,
+    pic = escher 5 True,
     bas = interpBasEscher
 }
