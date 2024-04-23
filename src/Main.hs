@@ -1,8 +1,11 @@
 module Main (main) where
 
-import Dibujos.Ejemplo (ejemploConf)
+-- import Dibujos.Ejemplo (ejemploConf)
 import Dibujos.Feo (feoConf)
-import Dibujos.Cuadrados(cuadConf)
+-- import Dibujos.Cuadrados(cuadConf)
+import Dibujos.Grilla (grillaConf)
+import Dibujos.Escher (escherConf)
+import Dibujos.Antropia (antropiaConf)
 import FloatingPic (Conf (..))
 import Interp (initial)
 import System.Environment (getArgs)
@@ -13,7 +16,7 @@ import InterpSVG (ConfSVG, initialSVG', simpleSVG)
 
 -- Lista de configuraciones de los dibujos
 configs :: [Conf]
-configs = [ejemploConf, feoConf,cuadConf 3]
+configs = [feoConf, grillaConf, escherConf, antropiaConf]
 
 configsH :: [ConfH]
 configsH = map (\(Conf n p _) -> simpleHaha n p) configs
@@ -36,11 +39,14 @@ main :: IO ()
 main = do
   args <- getArgs
   when (length args > 2 || null args) $ do
-    putStrLn "Sólo puede elegir un dibujo. Para ver los dibujos use -l ."
+    putStrLn "Sólo puede elegir un dibujo. Para ver los dibujos use --lista ."
     exitFailure
-  when (head args == "-l") $ do
+  when (head args == "--lista") $ do
     putStrLn "Los dibujos disponibles son:"
     mapM_ (putStrLn . name) configs
+    putStrLn "Por favor, ingrese el nombre del dibujo que desea ver:"
+    dibujoElegido <- getLine
+    initial' configs $ dibujoElegido
     exitSuccess
   when (head args == "-a" && not (null $ tail args)) $ do
     initialH' configsH (args!!1) 
@@ -49,3 +55,6 @@ main = do
     initialSVG' configsSVG (args!!1) 
     exitSuccess
   initial' configs $ head args
+
+-- Para ejecutar con la lista de dibujos hacer:
+-- cabal run dibujos -- --lista
