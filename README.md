@@ -1,6 +1,6 @@
 ---
 title: Laboratorio de Funcional
-author: Ezequiel Marin, Alexis Ortiz, Bruno Lopez Storani
+author: Ezequiel Marin, Alexis Ortiz
 ---
 La consigna del laboratorio está en https://tinyurl.com/funcional-2024-famaf
 
